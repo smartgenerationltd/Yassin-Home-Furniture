@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useProducts } from '../../context/ProductContext';
@@ -6,12 +5,15 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { WhatsAppIcon, PhoneIcon, MailIcon } from '../../components/icons';
 import { CONTACT_INFO } from '../../constants';
+import { useCart } from '../../context/CartContext';
+import OrderSuggestion from '../../components/OrderSuggestion';
 
 const ProductDetailPage: React.FC = () => {
   const { productId } = useParams<{ productId: string }>();
   const { getProductById } = useProducts();
   const product = getProductById(productId || '');
   const [activeImage, setActiveImage] = useState(0);
+  const { addProduct, removeProduct, isProductSelected } = useCart();
 
   if (!product) {
     return (
@@ -22,6 +24,16 @@ const ProductDetailPage: React.FC = () => {
       </div>
     );
   }
+  
+  const isSelected = isProductSelected(product.id);
+
+  const handleToggleSelection = () => {
+    if (isSelected) {
+      removeProduct(product.id);
+    } else {
+      addProduct(product.id);
+    }
+  };
 
   return (
     <div className="bg-white">
@@ -68,8 +80,22 @@ const ProductDetailPage: React.FC = () => {
               <p className="mt-2 text-gray-600 leading-relaxed">{product.description}</p>
             </div>
             
+            <div className="mt-10 space-y-4">
+              <h3 className="text-lg font-medium text-gray-900">Build Your Inquiry List</h3>
+               <button
+                  onClick={handleToggleSelection}
+                  className={`w-full flex items-center justify-center px-8 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white transition-colors ${
+                    isSelected
+                      ? 'bg-gray-700 hover:bg-gray-800'
+                      : 'bg-brand-primary hover:bg-brand-dark'
+                  }`}
+                >
+                  {isSelected ? '✓ Added to Inquiry List' : 'Add to Order Inquiry List'}
+                </button>
+            </div>
+
             <div className="mt-10">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Interested? Contact us to order.</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Or, contact us about this item directly.</h3>
               <div className="space-y-4">
                  <a
                   href={`https://wa.me/${CONTACT_INFO.whatsapp}?text=${encodeURIComponent(`Hi, I'm interested in the ${product.name}.`)}`}
@@ -100,6 +126,7 @@ const ProductDetailPage: React.FC = () => {
         </div>
       </main>
       <Footer />
+      <OrderSuggestion />
     </div>
   );
 };

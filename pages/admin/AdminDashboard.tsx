@@ -10,15 +10,15 @@ import { TrashIcon, EditIcon, PlusIcon } from '../../components/icons';
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { products, addProduct, updateProduct, deleteProduct } = useProducts();
-  const { isAdmin, logout } = useUserAuth();
+  const { isAuthenticated, logout } = useUserAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   useEffect(() => {
-    if (!isAdmin) {
-      navigate('/');
+    if (!isAuthenticated) {
+      navigate('/admin/login');
     }
-  }, [isAdmin, navigate]);
+  }, [isAuthenticated, navigate]);
   
   const handleLogout = () => {
     logout();

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useProducts } from '../../context/ProductContext';
@@ -6,6 +5,7 @@ import { CATEGORIES } from '../../constants';
 import ProductCard from '../../components/ProductCard';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import OrderSuggestion from '../../components/OrderSuggestion';
 
 const HomePage: React.FC = () => {
   const { products } = useProducts();
@@ -51,6 +51,7 @@ const HomePage: React.FC = () => {
         </div>
       </main>
       <Footer />
+      <OrderSuggestion />
     </div>
   );
 };

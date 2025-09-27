@@ -4,7 +4,7 @@ import { CATEGORIES } from '../constants';
 import { useUserAuth } from '../context/UserAuthContext';
 
 const Header: React.FC = () => {
-  const { user, logout, isAdmin } = useUserAuth();
+  const { user, logout } = useUserAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
@@ -47,19 +47,17 @@ const Header: React.FC = () => {
               Back
             </button>
           )}
-          {user && (
+          {user ? (
             <>
-              {isAdmin && (
-                <Link
-                  to="/admin/dashboard"
-                  className="text-sm font-semibold text-brand-primary hover:underline transition-colors"
-                >
-                  Admin
-                </Link>
-              )}
+              <Link
+                to="/admin/dashboard"
+                className="text-sm font-semibold text-brand-primary hover:underline transition-colors"
+              >
+                Admin Dashboard
+              </Link>
               <div className="flex items-center space-x-2">
                 {user.picture && <img src={user.picture} alt={user.name} className="w-8 h-8 rounded-full" />}
-                <span className="text-sm text-gray-700 hidden lg:inline">{user.name}</span>
+                <span className="text-sm text-gray-700 hidden lg:inline">{user.name || 'Admin'}</span>
               </div>
               <button
                 onClick={logout}
@@ -68,6 +66,10 @@ const Header: React.FC = () => {
                 Logout
               </button>
             </>
+          ) : (
+             <Link to="/admin/login" className="text-sm font-semibold text-gray-600 hover:text-brand-primary transition-colors">
+                Admin Login
+             </Link>
           )}
         </div>
       </div>

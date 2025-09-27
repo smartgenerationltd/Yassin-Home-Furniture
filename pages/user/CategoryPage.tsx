@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useProducts } from '../../context/ProductContext';
@@ -6,6 +5,7 @@ import { Category } from '../../types';
 import ProductCard from '../../components/ProductCard';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import OrderSuggestion from '../../components/OrderSuggestion';
 
 const CategoryPage: React.FC = () => {
   const { categoryName } = useParams<{ categoryName: string }>();
@@ -38,6 +38,7 @@ const CategoryPage: React.FC = () => {
         </div>
       </main>
       <Footer />
+      <OrderSuggestion />
     </div>
   );
 };

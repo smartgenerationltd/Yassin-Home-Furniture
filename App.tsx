@@ -1,39 +1,40 @@
 import React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ProductProvider } from './context/ProductContext';
 import { UserAuthProvider } from './context/UserAuthContext';
+import { CartProvider } from './context/CartContext';
 
 import HomePage from './pages/user/HomePage';
 import CategoryPage from './pages/user/CategoryPage';
 import ProductDetailPage from './pages/user/ProductDetailPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
-import LoginPage from './pages/LoginPage';
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminSignUp from './pages/admin/AdminSignUp';
 import ProtectedRoute from './components/ProtectedRoute';
-
-// The Google Client ID is expected to be available as an environment variable.
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 
 function App() {
   return (
-    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      <ProductProvider>
-        <UserAuthProvider>
+    <ProductProvider>
+      <UserAuthProvider>
+        <CartProvider>
           <HashRouter>
             <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              
+              {/* Public User Routes */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="/category/:categoryName" element={<CategoryPage />} />
+              <Route path="/product/:productId" element={<ProductDetailPage />} />
+
+              {/* Admin Routes */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/signup" element={<AdminSignUp />} />
               <Route element={<ProtectedRoute />}>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/category/:categoryName" element={<CategoryPage />} />
-                <Route path="/product/:productId" element={<ProductDetailPage />} />
                 <Route path="/admin/dashboard" element={<AdminDashboard />} />
               </Route>
             </Routes>
           </HashRouter>
-        </UserAuthProvider>
-      </ProductProvider>
-    </GoogleOAuthProvider>
+        </CartProvider>
+      </UserAuthProvider>
+    </ProductProvider>
   );
 }
 
